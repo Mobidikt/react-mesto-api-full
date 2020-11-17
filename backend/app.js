@@ -26,10 +26,10 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
     console.log(`Ошибка при подключении базы данных: ${err}`);
   });
 
-app.use((req, res, next) => {
-  req.user = { _id: '5fa41805d8f2932594af3049' };
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = { _id: '5fa41805d8f2932594af3049' };
+//   next();
+// });
 
 app.post('/signin', bodyParser.json(), login);
 app.post('/signup', bodyParser.json(), createUser);
