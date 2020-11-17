@@ -25,9 +25,15 @@ const getUser = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
+  let hashedPassword;
+  try{
+    hashedPassword = await bcrypt.hash(req.body.password, 10);
+  } catch (err) {
+    return res.status(500).send({ message: 'Ошибка хеширования пароля'})
+  }
   try {
-    const { name, about, avatar } = req.body;
-    const newUser = await User.create({ name, about, avatar });
+    const { name, about, avatar, email } = req.body;
+    const newUser = await User.create({ name, about, avatar, email, passowrd: hashedPassword });
     return res.status(200).send(newUser);
   } catch (err) {
     if (err.name === 'ValidationError') {
