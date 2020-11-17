@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 
 const getUsers = async (req, res) => {
   try {
@@ -40,6 +41,17 @@ const createUser = async (req, res) => {
       return res.status(400).send({ message: 'Неверная ссылка' });
     }
     return res.status(500).send({ message: 'Ошибка на сервере' });
+  }
+};
+
+const login = async (req, res) => {
+  try{
+    const { email, passowrd } = req.body;
+    const user = await User.findUserByCredentials( email, passowrd );
+    const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+    return res.status(200).send({ token });
+  } catch (err) {
+    return res.status(401).send({ message: 'Некоректные данные' });
   }
 };
 
@@ -85,6 +97,7 @@ module.exports = {
   getUsers,
   getUser,
   createUser,
+  login,
   updateUser,
   updateUserAvatar,
 };
