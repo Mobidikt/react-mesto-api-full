@@ -1,0 +1,15 @@
+@import url(./__list/place__list.css);
+@import url(./__placeholder/place__placeholder.css);
+@import url(./__placeholder/_hidden/place__placeholder_hidden.css);
+.place {
+  margin: 0 auto;
+}
+@media screen and (max-width: 620px) {
+  .place {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-line-pack: center;
+    align-content: center;
+  }
+}

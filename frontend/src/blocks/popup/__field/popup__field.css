@@ -1,0 +1,15 @@
+.popup__field {
+  display: block;
+  padding: 0 0 9px;
+}
+.popup__field:last-of-type {
+  margin-bottom: 18px;
+}
+@media screen and (max-width: 555px) {
+  .popup__field {
+    padding-bottom: 3px;
+  }
+  .popup__field:last-of-type {
+    margin-bottom: 11px;
+  }
+}
