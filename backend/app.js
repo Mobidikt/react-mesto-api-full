@@ -1,8 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/index.js');
+const bodyParser = require('body-parser');
 
 // const path = require('path');
+const {
+  createUser,
+  login,
+} = require('./controllers/users.js');
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -25,6 +30,10 @@ app.use((req, res, next) => {
   req.user = { _id: '5fa41805d8f2932594af3049' };
   next();
 });
+
+app.post('/signin', bodyParser.json(), login);
+app.post('/signup', bodyParser.json(), createUser);
+
 app.use(routes);
 
 
