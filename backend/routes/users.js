@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const {
   getUsers,
+  getUser,
   getUserById,
   updateUser,
   updateUserAvatar,
