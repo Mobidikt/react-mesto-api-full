@@ -1,20 +1,32 @@
 const jwt = require('jsonwebtoken');
 
+const handleAuthError = (res) => {
+  res
+    .status(401)
+    .send({ message: 'Необходима авторизация' });
+};
+
+const extractBearerToken = (header) => {
+  return header.replace('Bearer ', '');
+};
+
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
+
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new RegAuthError('Ошибка авторизации, неверный заголовок');
+    return handleAuthError(res);
   }
-  const token = authorization.replace('Bearer ', '');
+
+  const token = extractBearerToken(authorization);
   let payload;
+
   try {
-    // eslint-disable-next-line no-undef
-    payload = jwt.verify(token, process.env.NODE_ENV === 'production' ? process.env.JWT_SECRET : 'dev-secret');
+    payload = jwt.verify(token, 'super-strong-secret');
   } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    return handleAuthError(res);
   }
-  req.user = payload;
-  next();
+
+  req.user = payload; // записываем пейлоуд в объект запроса
+
+  next(); // пропускаем запрос дальше
 };

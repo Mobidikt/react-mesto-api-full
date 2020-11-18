@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const routes = require('./routes/index.js');
 const bodyParser = require('body-parser');
-
+const auth = require('./middlewares/auth');
 // const path = require('path');
 const {
   createUser,
@@ -34,6 +34,7 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
 app.post('/signin', bodyParser.json(), login);
 app.post('/signup', bodyParser.json(), createUser);
 
+app.use(auth);
 app.use(routes);
 
 

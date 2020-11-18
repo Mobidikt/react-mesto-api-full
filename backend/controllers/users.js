@@ -63,7 +63,7 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
   try{
     const { email, passowrd } = req.body;
-    const user = await User.findUserByCredentials( email, passowrd );
+    const user = await User.findOne({ email }).select( '+passowrd' );
     if (!user) {
       return res.status(401).send({ message: 'Некоректные данные' });
     }
