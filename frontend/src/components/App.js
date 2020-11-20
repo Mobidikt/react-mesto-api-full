@@ -35,6 +35,7 @@ function App() {
   const history = useHistory();
 
   useEffect(()=>{
+    
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       author.getToken(jwt)
@@ -44,6 +45,7 @@ function App() {
           history.push('/');
         })
         .catch((err) => {
+          
           if(err === 401){
             console.log("Переданный токен некорректен");
           } else {

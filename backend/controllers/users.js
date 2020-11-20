@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const getUsers = async (req, res) => {
   try {
@@ -43,32 +44,46 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
   let hashedPassword;
-  try{
+  const {email, password} = req.body;
+  if(!email || !password) {
+    return res.status(400).send({ message: 'Неверные данные' });
+  }
+  const user = await User.findOne({email});
+    if(user) {
+      return res.status(409).send({message: 'Уже есть пользователь с таким email'});
+    }
+  try {
     hashedPassword = await bcrypt.hash(req.body.password, 10);
   } catch (err) {
     return res.status(500).send({ message: 'Ошибка хеширования пароля'})
   }
   try {
     const { name, about, avatar, email } = req.body;
-    const newUser = await User.create({ name, about, avatar, email, passowrd: hashedPassword });
+    const newUser = await User.create({ name, about, avatar, email, password: hashedPassword });
     return res.status(200).send(newUser);
   } catch (err) {
-    if (err.name === 'ValidationError') {
-      return res.status(400).send({ message: 'Неверная ссылка' });
-    }
     return res.status(500).send({ message: 'Ошибка на сервере' });
   }
 };
 
 const login = async (req, res) => {
+  const {email, password} = req.body;
+  console.log(email, password)
+  if(!email || !password) {
+    return res.status(400).send({ message: 'Неверные данные' });
+  }
   try{
-    const { email, passowrd } = req.body;
-    const user = await User.findOne({ email }).select( '+passowrd' );
+    const user = await User.findOne({ email }).select('+password')
     if (!user) {
-      return res.status(401).send({ message: 'Некоректные данные' });
+      return res.status(401).send({ message: 'Нет пользователя с таким email' });
+    }
+    const matched = await bcrypt.compare(password, user.password);
+
+    if (!matched) {
+      return res.status(401).send({ message: 'Неправильный пароль' });
     }
     const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-    return res.status(200).send({ token });
+    return res.status(200).send({ token , email});
   } catch (err) {
     return res.status(401).send({ message: 'Некоректные данные' });
   }

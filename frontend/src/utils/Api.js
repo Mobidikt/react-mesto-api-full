@@ -109,7 +109,7 @@ class Api {
   }
 }
 const api = new Api({
-  serverUrl: "https://mesto.nomoreparties.co/v1/cohort-14",
+  serverUrl: "http://localhost:3000",
   authorization: "7a3dfd49-072e-4055-86f4-4cec12a9c522",
 });
 export default api;
