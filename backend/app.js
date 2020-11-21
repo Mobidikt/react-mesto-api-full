@@ -1,6 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const routes = require('./routes/index.js');
+const router = require('express').Router();
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const auth = require('./middlewares/auth');
 const path = require('path');
@@ -31,10 +32,13 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
 //   next();
 // });
 app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('*', (req,res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
 
-app.post('/signin', bodyParser.json(), login);
-app.post('/signup', bodyParser.json(), createUser);
-
+// app.post('/sign-in', bodyParser.json(), login);
+// app.post('/sign-up', bodyParser.json(), createUser);
+// // app.use('/');
 app.use(auth);
 app.use(routes);
 

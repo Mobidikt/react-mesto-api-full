@@ -12,9 +12,10 @@ const getUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
+  console.log("getUser", req);
   try {
     const id = req.user._id;
-    const user = await User.findById( id );
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).send({ message: 'Нет пользователя с таким id' });
     }
@@ -26,6 +27,24 @@ const getUser = async (req, res) => {
     return res.status(500).send({ message: 'Ошибка на сервере' });
   }
 };
+
+
+  // User.findById(req.user._id)
+  //   .then((userById) => {
+  //     // console.log(userById)
+  //     if (userById === null) {
+  //       return res.status(404).send({ message: 'Нет пользователя с таким id' })
+  //     }
+  //     res
+  //       .status(200)
+  //       .send(userById);
+  //   })
+
+  //   // .catch(() => {
+  //   //   throw new NotFoundError('Пользователя нет в базе данных');
+  //   // })
+
+  //   .catch(next);
 
 const getUserById = async (req, res) => {
   try {
@@ -68,7 +87,6 @@ const createUser = async (req, res) => {
 
 const login = async (req, res) => {
   const {email, password} = req.body;
-  console.log(email, password)
   if(!email || !password) {
     return res.status(400).send({ message: 'Неверные данные' });
   }
@@ -82,7 +100,7 @@ const login = async (req, res) => {
     if (!matched) {
       return res.status(401).send({ message: 'Неправильный пароль' });
     }
-    const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+    const token = jwt.sign({ _id: user._id }, 'my-secret-key', { expiresIn: '7d' });
     return res.status(200).send({ token , email});
   } catch (err) {
     return res.status(401).send({ message: 'Некоректные данные' });

@@ -5,6 +5,7 @@ class Author {
 
   _fetch(url, params) {
     return fetch(this._serverUrl + url, params).then((res) => {
+      console.log("fetch")
       if (res.ok) {
         return res.json();
       }

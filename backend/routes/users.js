@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
+const auth = require('../middlewares/auth');
 
 const {
   getUsers,
