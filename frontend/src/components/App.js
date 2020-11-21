@@ -39,6 +39,7 @@ function App() {
     if (jwt) {
       author.getToken(jwt)
         .then((res) => {
+          setCurrentUser(res);
           setLoggedIn(true);
           setEmail(res.email);
           history.push('/');
@@ -68,17 +69,13 @@ function App() {
       });}
   }, [loggedIn]);
   const handleCardLike = (card) => {
-    console.log(card)
     const jwt = localStorage.getItem('jwt');
-    console.log("isLiked", isLiked)
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
     api
       .changeLikeCardStatus(card._id, !isLiked, jwt)
       .then((newCard) => {
         console.log("newCard", newCard)
-         console.log(cards[0]._id)
-         console.log("card._id", card._id)
-        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        const newCards = cards.map((c) => (c._id === card._id ? newCard.data : c));
         setCards(newCards);
       })
       .catch((err) => {

@@ -44,13 +44,13 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
 // });
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('/sign-in', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 app.get('/sign-up', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
 app.post('/signin', bodyParser.json(), login);
@@ -59,8 +59,7 @@ app.post('/signup', bodyParser.json(), createUser);
 app.get('/users/me', auth, getUser);
 app.get('/users', getUsers);
 app.get('/users/:userId', auth, getUserById);
-// router.get('/users/me', auth, getUser);
-//router.post('/users', bodyParser.json(), createUser);
+
 app.patch('/users/me', auth, bodyParser.json(), updateUser);
 app.patch('/users/me/avatar', auth, bodyParser.json(), updateUserAvatar);
 app.post('/cards', auth, bodyParser.json(), createCard);
@@ -71,7 +70,5 @@ app.put('/cards/likes/:cardId', auth, likeCard);
 app.delete('/cards/likes/:cardId', auth, dislikeCard);
 
 app.use(routes);
-
-
 
 app.listen(PORT, () => console.log(`server port ${PORT}`));
