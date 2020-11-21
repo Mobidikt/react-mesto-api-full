@@ -52,24 +52,32 @@ function App() {
           }
         });
     }
-},[history])
+},[loggedIn, history])
   useEffect(() => {
     if(loggedIn){
       const jwt = localStorage.getItem('jwt');
     api
       .getUserInfo(jwt)
       .then((userInfo) => {
+        
         setCurrentUser(userInfo);
+        console.log("setCurrentUser", currentUser)
       })
       .catch((err) => {
         console.log(`Данные о пользователе не получены. ${err}`);
       });}
   }, [loggedIn]);
   const handleCardLike = (card) => {
+    console.log(card)
+    const jwt = localStorage.getItem('jwt');
+    console.log("isLiked", isLiked)
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !isLiked, jwt)
       .then((newCard) => {
+        console.log("newCard", newCard)
+         console.log(cards[0]._id)
+         console.log("card._id", card._id)
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
         setCards(newCards);
       })
@@ -78,8 +86,9 @@ function App() {
       });
   }
   const handleCardDelete = (card) => {
+    const jwt = localStorage.getItem('jwt');
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, jwt)
       .then(() => {
         const newCards = cards.filter((c) => c._id !== card._id);
         setCards(newCards);
@@ -90,8 +99,9 @@ function App() {
       });
   }
   const handleAddPlaceSubmit = (card) => {
+    const jwt = localStorage.getItem('jwt');
     api
-      .createCard(card)
+      .createCard(card, jwt)
       .then((res) => {
         const newCard = res;
         setCards([newCard, ...cards]);
@@ -104,8 +114,9 @@ function App() {
   }
   useEffect(() => {
     if(loggedIn){
+      const jwt = localStorage.getItem('jwt');
     api
-      .getInitialCards()
+      .getInitialCards(jwt)
       .then((card) => {
         setCards(card);
       })
@@ -187,6 +198,9 @@ function App() {
     document.removeEventListener("keydown", handleEsc);
     document.removeEventListener("click", overlayClose);
   }
+  const exit = () => {
+    setLoggedIn(false);
+  }
 
   const handleLogin =( password, email ) =>{
     author.login(password, email).then((res)=>{
@@ -246,6 +260,7 @@ function App() {
         <Header 
           email={email}
           login={loggedIn}
+          exit={exit}
         />
         <Switch>
           <Route path={ROUTES_MAP.SIGN_UP}>

@@ -1,8 +1,7 @@
 class Api {
   
-  constructor({ serverUrl, authorization }) {
+  constructor({ serverUrl }) {
     this._serverUrl = serverUrl;
-    this._authorization = authorization;
   }
 
   _fetch(url, params) {
@@ -50,19 +49,19 @@ class Api {
     });
   }
   //добавление карточки
-  getInitialCards() {
+  getInitialCards(jwt) {
     return this._fetch("/cards", {
       method: "GET",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
       },
     });
   }
-  createCard(info) {
+  createCard(info, jwt) {
     return this._fetch("/cards", {
       method: "POST",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -72,39 +71,39 @@ class Api {
     });
   }
   //удаление карточки
-  deleteCard(cardId) {
+  deleteCard(cardId, jwt) {
     return this._fetch(`/cards/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
   //  Реализация лайка
-  createLike(cardId) {
+  createLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: "PUT",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
-  deleteLike(cardId) {
+  deleteLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
-  changeLikeCardStatus(cardId, isLiked) {
+  changeLikeCardStatus(cardId, isLiked, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });

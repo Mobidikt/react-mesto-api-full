@@ -13,6 +13,13 @@ const {
   updateUser,
   updateUserAvatar,
 } = require('./controllers/users.js');
+const {
+  getCards,
+  createCard,
+  deleteCard,
+  likeCard,
+  dislikeCard,
+} = require('./controllers/cards.js');
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -51,12 +58,17 @@ app.post('/signup', bodyParser.json(), createUser);
 // app.use(auth);
 app.get('/users/me', auth, getUser);
 app.get('/users', getUsers);
-app.get('/users/:userId', getUserById);
+app.get('/users/:userId', auth, getUserById);
 // router.get('/users/me', auth, getUser);
 //router.post('/users', bodyParser.json(), createUser);
-app.patch('/users/me',auth , bodyParser.json(), updateUser);
-app.patch('/users/me/avatar',auth , bodyParser.json(), updateUserAvatar);
+app.patch('/users/me', auth, bodyParser.json(), updateUser);
+app.patch('/users/me/avatar', auth, bodyParser.json(), updateUserAvatar);
+app.post('/cards', auth, bodyParser.json(), createCard);
 
+app.get('/cards', auth, getCards);
+app.delete('/cards/:cardId', auth, deleteCard);
+app.put('/cards/likes/:cardId', auth, likeCard);
+app.delete('/cards/likes/:cardId', auth, dislikeCard);
 
 app.use(routes);
 

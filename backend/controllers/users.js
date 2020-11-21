@@ -12,7 +12,6 @@ const getUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log("getuser", req.user._id)
   try {
     const id = req.user._id;
     const user = await User.findById(id);
