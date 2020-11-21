@@ -7,6 +7,11 @@ const path = require('path');
 const {
   createUser,
   login,
+  getUser,
+  getUsers,
+  getUserById,
+  updateUser,
+  updateUserAvatar,
 } = require('./controllers/users.js');
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -31,11 +36,28 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
 //   next();
 // });
 app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('/sign-in', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+app.get('/sign-up', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
 
 app.post('/signin', bodyParser.json(), login);
 app.post('/signup', bodyParser.json(), createUser);
+// app.use(auth);
+app.get('/users/me', auth, getUser);
+app.get('/users', getUsers);
+app.get('/users/:userId', getUserById);
+// router.get('/users/me', auth, getUser);
+//router.post('/users', bodyParser.json(), createUser);
+app.patch('/users/me',auth , bodyParser.json(), updateUser);
+app.patch('/users/me/avatar',auth , bodyParser.json(), updateUserAvatar);
 
-app.use(auth);
+
 app.use(routes);
 
 

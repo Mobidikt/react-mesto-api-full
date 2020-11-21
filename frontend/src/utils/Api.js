@@ -1,4 +1,5 @@
 class Api {
+  
   constructor({ serverUrl, authorization }) {
     this._serverUrl = serverUrl;
     this._authorization = authorization;
@@ -12,20 +13,21 @@ class Api {
       return Promise.reject(`Ошибка: ${res.status}`);
     });
   }
-  getUserInfo() {
+  getUserInfo(jwt) {
     return this._fetch("/users/me", {
       method: "GET",
       headers: {
-        authorization: this._authorization,
+        "Content-Type": "application/json",
+        authorization: `Bearer ${jwt}`,
       },
     });
   }
   //редактирование информации профиля
-  setUserInfo(info) {
+  setUserInfo(info, jwt) {
     return this._fetch("/users/me", {
       method: "PATCH",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -35,11 +37,11 @@ class Api {
     });
   }
   //редактирование информации профиля
-  setUserAvatar(info) {
+  setUserAvatar(info, jwt) {
     return this._fetch("/users/me/avatar", {
       method: "PATCH",
       headers: {
-        authorization: this._authorization,
+        authorization:`Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -108,8 +110,8 @@ class Api {
     });
   }
 }
+
 const api = new Api({
   serverUrl: "http://localhost:3000",
-  authorization: "7a3dfd49-072e-4055-86f4-4cec12a9c522",
 });
 export default api;

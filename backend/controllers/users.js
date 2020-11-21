@@ -1,6 +1,6 @@
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const User = require('../models/user');
 
 const getUsers = async (req, res) => {
   try {
@@ -12,9 +12,10 @@ const getUsers = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
+  console.log("getuser", req.user._id)
   try {
     const id = req.user._id;
-    const user = await User.findById( id );
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).send({ message: 'Нет пользователя с таким id' });
     }
@@ -44,14 +45,14 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
   let hashedPassword;
-  const {email, password} = req.body;
-  if(!email || !password) {
+  const { email, password } = req.body;
+  if (!email || !password) {
     return res.status(400).send({ message: 'Неверные данные' });
   }
-  const user = await User.findOne({email});
-    if(user) {
-      return res.status(409).send({message: 'Уже есть пользователь с таким email'});
-    }
+  const user = await User.findOne({ email });
+  if (user) {
+    return res.status(409).send({message: 'Уже есть пользователь с таким email'});
+  }
   try {
     hashedPassword = await bcrypt.hash(req.body.password, 10);
   } catch (err) {
@@ -78,12 +79,11 @@ const login = async (req, res) => {
       return res.status(401).send({ message: 'Нет пользователя с таким email' });
     }
     const matched = await bcrypt.compare(password, user.password);
-
     if (!matched) {
       return res.status(401).send({ message: 'Неправильный пароль' });
     }
     const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-    return res.status(200).send({ token , email});
+    return res.status(200).send({ token, email});
   } catch (err) {
     return res.status(401).send({ message: 'Некоректные данные' });
   }
@@ -91,8 +91,8 @@ const login = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { name, about, avatar } = req.body;
-    const updateInfo = await User.findByIdAndUpdate(req.user._id, { name, about, avatar }, {
+    const { name, about } = req.body;
+    const updateInfo = await User.findByIdAndUpdate(req.user._id, { name, about }, {
       new: true,
       runValidators: true,
     }).orFail();

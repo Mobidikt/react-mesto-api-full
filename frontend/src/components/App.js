@@ -34,14 +34,13 @@ function App() {
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
   const history = useHistory();
 
-  useEffect(()=>{
-    
+  useEffect(()=>{   
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
       author.getToken(jwt)
         .then((res) => {
           setLoggedIn(true);
-          setEmail(res.data.email);
+          setEmail(res.email);
           history.push('/');
         })
         .catch((err) => {
@@ -56,8 +55,9 @@ function App() {
 },[history])
   useEffect(() => {
     if(loggedIn){
+      const jwt = localStorage.getItem('jwt');
     api
-      .getUserInfo()
+      .getUserInfo(jwt)
       .then((userInfo) => {
         setCurrentUser(userInfo);
       })
@@ -115,8 +115,9 @@ function App() {
   }, [loggedIn]);
 
   const handleUpdateUser = (info) => {
+    const jwt = localStorage.getItem('jwt');
     api
-      .setUserInfo(info)
+      .setUserInfo(info, jwt)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -127,8 +128,9 @@ function App() {
       .finally(() => {});
   }
   const handleUpdateAvatar = (avatar) => {
+    const jwt = localStorage.getItem('jwt');
     api
-      .setUserAvatar(avatar)
+      .setUserAvatar(avatar, jwt)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
@@ -190,8 +192,8 @@ function App() {
     author.login(password, email).then((res)=>{
       localStorage.setItem('jwt', res.token); 
       author.getToken(res.token).then((res)=>{
-      setEmail(res.data.email);
       setLoggedIn(true);
+      setEmail(res.email);
       history.push('/');
     })
     .catch((err)=>{
