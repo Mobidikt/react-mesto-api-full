@@ -10,7 +10,6 @@ const getCards = async (req, res) => {
 };
 
 const createCard = async (req, res) => {
-  console.log('getuser', req.user._id);
   try {
     const { name, link } = req.body;
     const card = await Card.create({ name, link, owner: req.user._id });
@@ -39,7 +38,6 @@ const deleteCard = async (req, res) => {
 };
 
 const likeCard = async (req, res) => {
-  console.log('likeCard', req.user._id);
   try {
     const likes = await Card.findByIdAndUpdate(
       req.params.cardId,
