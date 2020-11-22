@@ -113,6 +113,6 @@ class Api {
 //   serverUrl: "http://localhost:3000",
 // });
 const api = new Api({
-  serverUrl: 'http://api.mobidikt.students.nomoreparties.co',
+  serverUrl: 'https://api.mobidikt.students.nomoreparties.co',
 });
 export default api;
