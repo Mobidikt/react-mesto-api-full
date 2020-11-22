@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
+const { errors } = require('celebrate');
 const routes = require('./routes/index.js');
 const { validationUser } = require('./middlewares/validation');
 const { createUser, login } = require('./controllers/users.js');
@@ -50,4 +51,10 @@ app.post('/signup', validationUser, bodyParser.json(), createUser);
 
 app.use(routes);
 app.use(errorLogger);
+app.use(errors());
+app.use((err, req, res) => {
+  res
+    .status(err.statusCode || 500)
+    .send({ message: err.message || 'На сервере произошла ошибка' });
+});
 app.listen(PORT, () => console.log(`server port ${PORT}`));
