@@ -74,8 +74,25 @@ mongoose
 //   next();
 // });
 
+const allowedCors = [
+  'https://www.mobidikt.students.nomoreparties.co',
+  'http://www.mobidikt.students.nomoreparties.co',
+  'https://mobidikt.students.nomoreparties.co',
+  'http://mobidikt.students.nomoreparties.co',
+  'http://localhost:3000',
+];
+
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
+  if (allowedCors.includes(origin)) {
+    // Проверяем, что значение origin есть среди разрешённых доменов
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+  next();
+});
+
 // app.use(cors());
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 // app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('/sign-in', (req, res) => {
