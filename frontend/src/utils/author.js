@@ -12,34 +12,37 @@ class Author {
     });
   }
   getToken(token) {
-    return this._fetch("/users/me", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization" : `Bearer ${token}`,
-        },
+    return this._fetch('/users/me', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
-  login (password, email) {
-    return this._fetch("/signin", {
+  login(password, email) {
+    return this._fetch('/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ password, email }),
-    });  
+    });
   }
-  register (password, email) { 
-    return this._fetch("/signup", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ password, email }),
+  register(password, email) {
+    return this._fetch('/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ password, email }),
     });
   }
 }
+// const author = new Author({
+//   serverUrl: 'http://localhost:3000'
+// });
 const author = new Author({
-  serverUrl: 'http://localhost:3000'
+  serverUrl: 'http://api.mobidikt.students.nomoreparties.co',
 });
 export default author;
