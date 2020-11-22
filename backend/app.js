@@ -1,9 +1,17 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const routes = require('./routes/index.js');
 const bodyParser = require('body-parser');
-const auth = require('./middlewares/auth');
+const mongoose = require('mongoose');
 const path = require('path');
+const routes = require('./routes/index.js');
+const auth = require('./middlewares/auth');
+const {
+  validationUser,
+  validationCard,
+  validationParams,
+  validationUserInfo,
+  validationUserAvatar,
+} = require('./middlewares/validation');
+
 const {
   createUser,
   login,
@@ -20,6 +28,7 @@ const {
   likeCard,
   dislikeCard,
 } = require('./controllers/cards.js');
+
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -30,7 +39,8 @@ const mongoConnectOptions = {
   useFindAndModify: false,
 };
 
-mongoose.connect(mongoDbUrl, mongoConnectOptions)
+mongoose
+  .connect(mongoDbUrl, mongoConnectOptions)
   .then(() => {
     console.log('База данных подключена');
   })
@@ -53,21 +63,27 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
-app.post('/signin', bodyParser.json(), login);
-app.post('/signup', bodyParser.json(), createUser);
+app.post('/signin', validationUser, bodyParser.json(), login);
+app.post('/signup', validationUser, bodyParser.json(), createUser);
 // app.use(auth);
 app.get('/users/me', auth, getUser);
-app.get('/users', getUsers);
-app.get('/users/:userId', auth, getUserById);
+app.get('/users', auth, getUsers);
+app.get('/users/:userId', validationParams, auth, getUserById);
 
-app.patch('/users/me', auth, bodyParser.json(), updateUser);
-app.patch('/users/me/avatar', auth, bodyParser.json(), updateUserAvatar);
-app.post('/cards', auth, bodyParser.json(), createCard);
+app.patch('/users/me', validationUserInfo, auth, bodyParser.json(), updateUser);
+app.patch(
+  '/users/me/avatar',
+  validationUserAvatar,
+  auth,
+  bodyParser.json(),
+  updateUserAvatar,
+);
 
 app.get('/cards', auth, getCards);
-app.delete('/cards/:cardId', auth, deleteCard);
-app.put('/cards/likes/:cardId', auth, likeCard);
-app.delete('/cards/likes/:cardId', auth, dislikeCard);
+app.post('/cards', validationCard, auth, bodyParser.json(), createCard);
+app.delete('/cards/:cardId', validationParams, auth, deleteCard);
+app.put('/cards/likes/:cardId', validationParams, auth, likeCard);
+app.delete('/cards/likes/:cardId', validationParams, auth, dislikeCard);
 
 app.use(routes);
 

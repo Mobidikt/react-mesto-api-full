@@ -74,7 +74,6 @@ function App() {
     api
       .changeLikeCardStatus(card._id, !isLiked, jwt)
       .then((newCard) => {
-        console.log("newCard", newCard)
         const newCards = cards.map((c) => (c._id === card._id ? newCard.data : c));
         setCards(newCards);
       })
