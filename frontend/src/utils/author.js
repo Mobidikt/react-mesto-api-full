@@ -1,3 +1,5 @@
+import { API_URL } from './constant';
+
 class Author {
   constructor({ serverUrl }) {
     this._serverUrl = serverUrl;
@@ -40,6 +42,6 @@ class Author {
   }
 }
 const author = new Author({
-  serverUrl: 'https://api.mobidikt.students.nomoreparties.co',
+  serverUrl: API_URL,
 });
 export default author;

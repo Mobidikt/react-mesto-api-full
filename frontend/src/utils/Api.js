@@ -1,3 +1,5 @@
+import { API_URL } from './constant';
+
 class Api {
   constructor({ serverUrl }) {
     this._serverUrl = serverUrl;
@@ -113,6 +115,6 @@ class Api {
 //   serverUrl: "http://localhost:3000",
 // });
 const api = new Api({
-  serverUrl: 'https://api.mobidikt.students.nomoreparties.co',
+  serverUrl: API_URL,
 });
 export default api;
