@@ -28,6 +28,24 @@ const app = express();
 //   credentials: true,
 // };
 
+const whiteList = [
+  'https://www.mobidikt.students.nomoreparties.co',
+  'http://www.mobidikt.students.nomoreparties.co',
+  'https://mobidikt.students.nomoreparties.co',
+  'http://mobidikt.students.nomoreparties.co',
+  'http://localhost:3000',
+];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whiteList.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true,
+};
+
 const mongoDbUrl = 'mongodb://localhost:27017/mestodb';
 const mongoConnectOptions = {
   useNewUrlParser: true,
@@ -44,19 +62,20 @@ mongoose
     console.log(`Ошибка при подключении базы данных: ${err}`);
   });
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
-  );
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+// app.use((req, res, next) => {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept',
+//   );
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
 
-  next();
-});
+//   console.log(res.header);
+//   next();
+// });
 
-app.use(cors());
-
+// app.use(cors());
+app.use(cors(corsOptions));
 // app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('/sign-in', (req, res) => {
