@@ -12,21 +12,21 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const corsOptions = {
-  origin: [
-    'https://api.mobidikt.students.nomoreparties.co',
-    'https://api.mobidikt.students.nomoreparties.co/signin',
-    'https://api.mobidikt.students.nomoreparties.co/signup',
-    'https://www.api.mobidikt.students.nomoreparties.co',
-    'https://www.mobidikt.students.nomoreparties.co',
-    'https://mobidikt.students.nomoreparties.co',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: [
+//     'https://api.mobidikt.students.nomoreparties.co',
+//     'https://api.mobidikt.students.nomoreparties.co/signin',
+//     'https://api.mobidikt.students.nomoreparties.co/signup',
+//     'https://www.api.mobidikt.students.nomoreparties.co',
+//     'https://www.mobidikt.students.nomoreparties.co',
+//     'https://mobidikt.students.nomoreparties.co',
+//   ],
+//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
+//   credentials: true,
+// };
 
 const mongoDbUrl = 'mongodb://localhost:27017/mestodb';
 const mongoConnectOptions = {
@@ -44,7 +44,20 @@ mongoose
     console.log(`Ошибка при подключении базы данных: ${err}`);
   });
 
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept',
+  );
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+
+  next();
+});
+
+app.use(cors());
+
+// app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 app.get('/sign-in', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
