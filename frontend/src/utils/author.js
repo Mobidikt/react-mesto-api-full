@@ -40,6 +40,6 @@ class Author {
   }
 }
 const author = new Author({
-  serverUrl: 'https://api.mobidikt.students.nomoreparties.co',
+  serverUrl: 'http://api.mobidikt.students.nomoreparties.co',
 });
 export default author;
