@@ -1,5 +1,4 @@
 class Api {
-  
   constructor({ serverUrl }) {
     this._serverUrl = serverUrl;
   }
@@ -13,21 +12,21 @@ class Api {
     });
   }
   getUserInfo(jwt) {
-    return this._fetch("/users/me", {
-      method: "GET",
+    return this._fetch('/users/me', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         authorization: `Bearer ${jwt}`,
       },
     });
   }
   //редактирование информации профиля
   setUserInfo(info, jwt) {
-    return this._fetch("/users/me", {
-      method: "PATCH",
+    return this._fetch('/users/me', {
+      method: 'PATCH',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: info.name,
@@ -37,11 +36,11 @@ class Api {
   }
   //редактирование информации профиля
   setUserAvatar(info, jwt) {
-    return this._fetch("/users/me/avatar", {
-      method: "PATCH",
+    return this._fetch('/users/me/avatar', {
+      method: 'PATCH',
       headers: {
-        authorization:`Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         avatar: info,
@@ -50,19 +49,19 @@ class Api {
   }
   //добавление карточки
   getInitialCards(jwt) {
-    return this._fetch("/cards", {
-      method: "GET",
+    return this._fetch('/cards', {
+      method: 'GET',
       headers: {
         authorization: `Bearer ${jwt}`,
       },
     });
   }
   createCard(info, jwt) {
-    return this._fetch("/cards", {
-      method: "POST",
+    return this._fetch('/cards', {
+      method: 'POST',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: info.name,
@@ -73,44 +72,47 @@ class Api {
   //удаление карточки
   deleteCard(cardId, jwt) {
     return this._fetch(`/cards/${cardId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
   //  Реализация лайка
   createLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
   deleteLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
   changeLikeCardStatus(cardId, isLiked, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
-      method: isLiked ? "PUT" : "DELETE",
+      method: isLiked ? 'PUT' : 'DELETE',
       headers: {
         authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }
 }
 
+// const api = new Api({
+//   serverUrl: "http://localhost:3000",
+// });
 const api = new Api({
-  serverUrl: "http://localhost:3000",
+  serverUrl: 'http://api.mobidikt.students.nomoreparties.co',
 });
 export default api;
