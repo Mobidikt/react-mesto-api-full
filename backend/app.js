@@ -1,8 +1,13 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+const { errors } = require('celebrate');
 const routes = require('./routes/index.js');
+const { validationUser } = require('./middlewares/validation');
+const { createUser, login } = require('./controllers/users.js');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-// const path = require('path');
 const { PORT = 3000 } = process.env;
 const app = express();
 
@@ -13,7 +18,8 @@ const mongoConnectOptions = {
   useFindAndModify: false,
 };
 
-mongoose.connect(mongoDbUrl, mongoConnectOptions)
+mongoose
+  .connect(mongoDbUrl, mongoConnectOptions)
   .then(() => {
     console.log('База данных подключена');
   })
@@ -21,13 +27,34 @@ mongoose.connect(mongoDbUrl, mongoConnectOptions)
     console.log(`Ошибка при подключении базы данных: ${err}`);
   });
 
-app.use((req, res, next) => {
-  req.user = { _id: '5fa41805d8f2932594af3049' };
-  next();
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.get('/sign-in', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
+app.get('/sign-up', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
+
+app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
+app.post('/signin', validationUser, bodyParser.json(), login);
+app.post('/signup', validationUser, bodyParser.json(), createUser);
+
 app.use(routes);
-
-
-// app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(errorLogger);
+app.use(errors());
+app.use((err, req, res) => {
+  res
+    .status(err.statusCode || 500)
+    .send({ message: err.message || 'На сервере произошла ошибка' });
+});
 app.listen(PORT, () => console.log(`server port ${PORT}`));

@@ -2,8 +2,9 @@ import React from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import headerLogo from '../images/header/logo.svg';
 import { ROUTES_MAP } from '../utils/routesMap';
-function Header({email}) {
+function Header(props) {
   const exit = () => {
+    props.exit();
     localStorage.setItem('jwt', '');
   }
   return <Switch>
@@ -20,7 +21,7 @@ function Header({email}) {
         </Route>
         <Route path='/' exact>
           <div className='header__user'>
-          <p className='header__email'>{email}</p>
+          <p className='header__email'>{props.email}</p>
           <Link className='header__button' to={ROUTES_MAP.SIGN_IN} onClick={exit}>Выйти</Link>
           </div>
         </Route>

@@ -40,6 +40,6 @@ class Author {
   }
 }
 const author = new Author({
-  serverUrl: 'https://auth.nomoreparties.co'
+  serverUrl: 'http://localhost:3000'
 });
 export default author;

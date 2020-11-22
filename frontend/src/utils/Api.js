@@ -1,7 +1,7 @@
 class Api {
-  constructor({ serverUrl, authorization }) {
+  
+  constructor({ serverUrl }) {
     this._serverUrl = serverUrl;
-    this._authorization = authorization;
   }
 
   _fetch(url, params) {
@@ -12,20 +12,21 @@ class Api {
       return Promise.reject(`Ошибка: ${res.status}`);
     });
   }
-  getUserInfo() {
+  getUserInfo(jwt) {
     return this._fetch("/users/me", {
       method: "GET",
       headers: {
-        authorization: this._authorization,
+        "Content-Type": "application/json",
+        authorization: `Bearer ${jwt}`,
       },
     });
   }
   //редактирование информации профиля
-  setUserInfo(info) {
+  setUserInfo(info, jwt) {
     return this._fetch("/users/me", {
       method: "PATCH",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -35,11 +36,11 @@ class Api {
     });
   }
   //редактирование информации профиля
-  setUserAvatar(info) {
+  setUserAvatar(info, jwt) {
     return this._fetch("/users/me/avatar", {
       method: "PATCH",
       headers: {
-        authorization: this._authorization,
+        authorization:`Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -48,19 +49,19 @@ class Api {
     });
   }
   //добавление карточки
-  getInitialCards() {
+  getInitialCards(jwt) {
     return this._fetch("/cards", {
       method: "GET",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
       },
     });
   }
-  createCard(info) {
+  createCard(info, jwt) {
     return this._fetch("/cards", {
       method: "POST",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -70,46 +71,46 @@ class Api {
     });
   }
   //удаление карточки
-  deleteCard(cardId) {
+  deleteCard(cardId, jwt) {
     return this._fetch(`/cards/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
   //  Реализация лайка
-  createLike(cardId) {
+  createLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: "PUT",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
-  deleteLike(cardId) {
+  deleteLike(cardId, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
-  changeLikeCardStatus(cardId, isLiked) {
+  changeLikeCardStatus(cardId, isLiked, jwt) {
     return this._fetch(`/cards/likes/${cardId}`, {
       method: isLiked ? "PUT" : "DELETE",
       headers: {
-        authorization: this._authorization,
+        authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
     });
   }
 }
+
 const api = new Api({
-  serverUrl: "https://mesto.nomoreparties.co/v1/cohort-14",
-  authorization: "7a3dfd49-072e-4055-86f4-4cec12a9c522",
+  serverUrl: "http://localhost:3000",
 });
 export default api;
