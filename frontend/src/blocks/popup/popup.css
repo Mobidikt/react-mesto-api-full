@@ -1,0 +1,43 @@
+@import url(./__container/popup__container.css);
+@import url(./__container/_verification/popup__container_verification.css);
+@import url(./__container/_avatar/popup__container_avatar.css);
+@import url(./__title/popup__title.css);
+@import url(./__title/_verification/popup__title_verification.css);
+@import url(./__button/popup__button.css);
+@import url(./__button/_disabled/popup__button_disabled.css);
+@import url(./__close/popup__close.css);
+@import url(./__form/popup__form.css);
+@import url(./__input/popup__input.css);
+@import url(./__picture/popup__picture.css);
+@import url(./__caption/popup__caption.css);
+@import url(./__container/_photo/popup__container_photo.css);
+@import url(./__input/_type/_error/popup__input_type_error.css);
+@import url(./__error/popup__error.css);
+@import url(./__error/_visible/popup__error_visible.css);
+@import url(./__field/popup__field.css);
+@import url(./__container/_info/popup__container_info.css);
+@import url(./__title/_login/popup__title_login.css);
+@import url(./__image/popup__image.css);
+
+.popup {
+  position: fixed;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: visibility 0.5s, opacity 0.5s linear;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: rgb(0, 0, 0, 0.5);
+}

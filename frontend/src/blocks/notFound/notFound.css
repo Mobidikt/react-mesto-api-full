@@ -1,0 +1,7 @@
+@import url(./__title/notFound__title.css);
+@import url(./__text/notFound__text.css);
+
+.notFound{display: flex;
+    flex-direction: column;
+    color: #ffffff;
+}
