@@ -11,7 +11,6 @@ const {
   validationUserInfo,
   validationUserAvatar,
 } = require('./middlewares/validation');
-
 const {
   createUser,
   login,
@@ -28,6 +27,7 @@ const {
   likeCard,
   dislikeCard,
 } = require('./controllers/cards.js');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -63,6 +63,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
+app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
 app.post('/signin', validationUser, bodyParser.json(), login);
 app.post('/signup', validationUser, bodyParser.json(), createUser);
 // app.use(auth);
@@ -86,5 +94,5 @@ app.put('/cards/likes/:cardId', validationParams, auth, likeCard);
 app.delete('/cards/likes/:cardId', validationParams, auth, dislikeCard);
 
 app.use(routes);
-
+app.use(errorLogger);
 app.listen(PORT, () => console.log(`server port ${PORT}`));
