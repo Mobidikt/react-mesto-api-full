@@ -3,29 +3,30 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const { errors } = require('celebrate');
-const cors = require('cors');
+// const cors = require('cors');
 const routes = require('./routes/index.js');
 const { validationUser } = require('./middlewares/validation');
 const { createUser, login } = require('./controllers/users.js');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const corsOptions = {
-  origin: [
-    'https://www.mobidikt.students.nomoreparties.co',
-    'http://www.mobidikt.students.nomoreparties.co',
-    'https://mobidikt.students.nomoreparties.co/sign-up',
-    'https://mobidikt.students.nomoreparties.co/sign-up',
-    'http://mobidikt.students.nomoreparties.co',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: [
+//     'https://www.mobidikt.students.nomoreparties.co',
+//     'http://www.mobidikt.students.nomoreparties.co',
+//     'https://mobidikt.students.nomoreparties.co/sign-up',
+//     'https://mobidikt.students.nomoreparties.co/sign-up',
+//     'http://mobidikt.students.nomoreparties.co',
+//   ],
+//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+//   preflightContinue: false,
+//   optionsSuccessStatus: 204,
+//   allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
+//   credentials: true,
+// };
 
 // const whiteList = [
 //   'https://www.mobidikt.students.nomoreparties.co',
@@ -111,8 +112,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', cors(), validationUser, bodyParser.json(), login);
-app.post('/signup', validationUser, cors(), bodyParser.json(), createUser);
+app.post('/signin', cors, validationUser, bodyParser.json(), login);
+app.post('/signup', validationUser, cors, bodyParser.json(), createUser);
 
 app.use(routes);
 app.use(errorLogger);
