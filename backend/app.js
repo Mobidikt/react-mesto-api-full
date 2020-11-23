@@ -123,4 +123,7 @@ app.use((err, req, res) => {
     .status(err.statusCode || 500)
     .send({ message: err.message || 'На сервере произошла ошибка' });
 });
+app.use((req, res) => {
+  res.status(404).send({ message: 'Запрашиваемый ресурс не найден' });
+});
 app.listen(PORT, () => console.log(`server port ${PORT}`));
