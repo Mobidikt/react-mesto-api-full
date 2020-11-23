@@ -22,17 +22,17 @@ const allowedCors = [
 // };
 
 module.exports = async (req, res, next) => {
-  const { origin } = req.headers;
+  // const { origin } = req.headers;
   console.log(res.headers); // Записываем в переменную origin соответствующий заголовок
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header(
-      'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept',
-    );
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept',
+  );
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
+  res.header('Content-Security-Policy', "default-src 'none'");
 
-    console.log(res.header);
-  }
+  console.log(res.header);
   return next();
 };
