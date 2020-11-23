@@ -95,15 +95,15 @@ app.use(cors());
 // app.use(cors(corsOptions));
 // app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../frontend/build')));
-app.get('/sign-in', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-});
-app.get('/sign-up', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-});
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-});
+// app.get('/sign-in', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+// });
+// app.get('/sign-up', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+// });
+// app.get('/', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+// });
 
 app.use(requestLogger);
 app.get('/crash-test', () => {
