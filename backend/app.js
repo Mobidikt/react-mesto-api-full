@@ -118,8 +118,11 @@ app.post('/signup', validationUser, cors, bodyParser.json(), createUser);
 app.use(routes);
 app.use(errorLogger);
 app.use(errors());
-app.use((err, req, res) => {
+app.use((err, req, res, _) => {
   console.log('ERROR', err);
+  if ([].length) {
+    _();
+  }
   res
     .status(err.statusCode || 500)
     .send({ message: err.message || 'На сервере произошла ошибка' });
