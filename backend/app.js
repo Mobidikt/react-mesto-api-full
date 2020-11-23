@@ -12,39 +12,38 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000 } = process.env;
 const app = express();
 
-// const corsOptions = {
-//   origin: [
-//     'https://api.mobidikt.students.nomoreparties.co',
-//     'https://api.mobidikt.students.nomoreparties.co/signin',
-//     'https://api.mobidikt.students.nomoreparties.co/signup',
-//     'https://www.api.mobidikt.students.nomoreparties.co',
-//     'https://www.mobidikt.students.nomoreparties.co',
-//     'https://mobidikt.students.nomoreparties.co',
-//   ],
-//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-//   preflightContinue: false,
-//   optionsSuccessStatus: 204,
-//   allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
-//   credentials: true,
-// };
-
-const whiteList = [
-  'https://www.mobidikt.students.nomoreparties.co',
-  'http://www.mobidikt.students.nomoreparties.co',
-  'https://mobidikt.students.nomoreparties.co',
-  'http://mobidikt.students.nomoreparties.co',
-  'http://localhost:3000',
-];
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (whiteList.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(null, false);
-    }
-  },
+  origin: [
+    'https://www.mobidikt.students.nomoreparties.co',
+    'http://www.mobidikt.students.nomoreparties.co',
+    'https://mobidikt.students.nomoreparties.co/sign-up',
+    'https://mobidikt.students.nomoreparties.co/sign-up',
+    'http://mobidikt.students.nomoreparties.co',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'x-access-token'],
   credentials: true,
 };
+
+// const whiteList = [
+//   'https://www.mobidikt.students.nomoreparties.co',
+//   'http://www.mobidikt.students.nomoreparties.co',
+//   'https://mobidikt.students.nomoreparties.co',
+//   'http://mobidikt.students.nomoreparties.co',
+//   'http://localhost:3000',
+// ];
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whiteList.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(null, false);
+//     }
+//   },
+//   credentials: true,
+// };
 
 const mongoDbUrl = 'mongodb://localhost:27017/mestodb';
 const mongoConnectOptions = {
@@ -112,20 +111,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post(
-  '/signin',
-  cors(corsOptions),
-  validationUser,
-  bodyParser.json(),
-  login,
-);
-app.post(
-  '/signup',
-  validationUser,
-  cors(corsOptions),
-  bodyParser.json(),
-  createUser,
-);
+app.post('/signin', cors(), validationUser, bodyParser.json(), login);
+app.post('/signup', validationUser, cors(), bodyParser.json(), createUser);
 
 app.use(routes);
 app.use(errorLogger);
