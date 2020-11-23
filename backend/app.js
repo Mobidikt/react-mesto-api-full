@@ -3,12 +3,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const { errors } = require('celebrate');
-// const cors = require('cors');
+const cors = require('cors');
 const routes = require('./routes/index.js');
 const { validationUser } = require('./middlewares/validation');
 const { createUser, login } = require('./controllers/users.js');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const cors = require('./middlewares/cors');
+//const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -91,7 +91,7 @@ mongoose
 //   next();
 // });
 
-// app.use(cors());
+app.use(cors());
 // app.use(cors(corsOptions));
 // app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, '../frontend/build')));
@@ -112,8 +112,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', cors, validationUser, bodyParser.json(), login);
-app.post('/signup', validationUser, cors, bodyParser.json(), createUser);
+app.post('/signin', validationUser, bodyParser.json(), login);
+app.post('/signup', validationUser, bodyParser.json(), createUser);
 
 app.use(routes);
 app.use(errorLogger);
