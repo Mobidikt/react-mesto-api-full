@@ -119,6 +119,7 @@ app.use(routes);
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res) => {
+  console.log('ERROR', err);
   res
     .status(err.statusCode || 500)
     .send({ message: err.message || 'На сервере произошла ошибка' });
