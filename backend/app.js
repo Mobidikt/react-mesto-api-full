@@ -74,22 +74,22 @@ mongoose
 //   next();
 // });
 
-const allowedCors = [
-  'https://www.mobidikt.students.nomoreparties.co',
-  'http://www.mobidikt.students.nomoreparties.co',
-  'https://mobidikt.students.nomoreparties.co',
-  'http://mobidikt.students.nomoreparties.co',
-  'http://localhost:3000',
-];
+// const allowedCors = [
+//   'https://www.mobidikt.students.nomoreparties.co',
+//   'http://www.mobidikt.students.nomoreparties.co',
+//   'https://mobidikt.students.nomoreparties.co',
+//   'http://mobidikt.students.nomoreparties.co',
+//   'http://localhost:3000',
+// ];
 
-app.use((req, res, next) => {
-  const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
-  if (allowedCors.includes(origin)) {
-    // Проверяем, что значение origin есть среди разрешённых доменов
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
+//   if (allowedCors.includes(origin)) {
+//     // Проверяем, что значение origin есть среди разрешённых доменов
+//     res.header('Access-Control-Allow-Origin', origin);
+//   }
+//   next();
+// });
 
 // app.use(cors());
 // app.use(cors(corsOptions));
@@ -112,8 +112,20 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', validationUser, bodyParser.json(), login);
-app.post('/signup', validationUser, bodyParser.json(), createUser);
+app.post(
+  '/signin',
+  cors(corsOptions),
+  validationUser,
+  bodyParser.json(),
+  login,
+);
+app.post(
+  '/signup',
+  validationUser,
+  cors(corsOptions),
+  bodyParser.json(),
+  createUser,
+);
 
 app.use(routes);
 app.use(errorLogger);
