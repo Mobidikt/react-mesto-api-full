@@ -90,7 +90,7 @@ const login = async (req, res) => {
     if (!matched) {
       return res.status(401).send({ message: 'Неправильный пароль' });
     }
-    const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_TOKEN, {
       expiresIn: '7d',
     });
     return res.status(200).send({ token, email });

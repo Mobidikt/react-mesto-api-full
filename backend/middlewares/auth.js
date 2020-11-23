@@ -15,7 +15,7 @@ module.exports = async (req, res, next) => {
 
   let payload;
   try {
-    payload = await jwt.verify(token, 'some-secret-key');
+    payload = await jwt.verify(token, process.env.JWT_TOKEN);
   } catch (err) {
     return handleAuthError(res);
   }
