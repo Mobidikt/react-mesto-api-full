@@ -30,7 +30,7 @@ const createCard = async (req, res, next) => {
 const deleteCard = async (req, res, next) => {
   try {
     const card = await Card.findById(req.params.cardId);
-    if (card.owner === req.user._id) {
+    if (card.owner.toString() !== req.user._id) {
       throw new ForbiddenError('Недостаточно прав');
     } else {
       await Card.findByIdAndDelete(req.params.cardId).orFail();
