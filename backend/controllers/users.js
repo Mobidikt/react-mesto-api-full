@@ -49,7 +49,7 @@ const getUserById = async (req, res, next) => {
 const createUser = async (req, res, next) => {
   let hashedPassword;
   const { email, password } = req.body;
-  if (!email || !password) {
+  if (!email || !password || !password.trim()) {
     return next(new BadRequestError('Переданы некорректные данные'));
   }
   const user = await User.findOne({ email });
@@ -78,7 +78,7 @@ const createUser = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password || !password.trim()) {
+  if (!email || !password) {
     return next(new BadRequestError('Неверные данные'));
   }
   try {
