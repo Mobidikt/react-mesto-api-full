@@ -70,7 +70,12 @@ const createUser = async (req, res, next) => {
       email,
       password: hashedPassword,
     });
-    return res.status(200).send(newUser);
+    return res.status(200).send({
+      name: newUser.name,
+      about: newUser.about,
+      avatar: newUser.avatar,
+      email: newUser.email,
+    });
   } catch (err) {
     return next();
   }
