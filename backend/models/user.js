@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const validator = require('validator');
 
-const passwordSchema = new Schema({ type: String, require: true });
+// const passwordSchema = new Schema({ type: String, require: true });
 
 const userSchema = new Schema(
   {
@@ -41,7 +41,8 @@ const userSchema = new Schema(
       },
     },
     password: {
-      type: passwordSchema,
+      type: String,
+      require: true,
       select: false,
     },
   },
