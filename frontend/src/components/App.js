@@ -192,7 +192,6 @@ function App() {
     setVerificationPopupOpen(false);
     setImagePopupOpen(false);
     setInfoTooltipOpen(false);
-    // setSelectedCard(null);
     document.removeEventListener('keydown', handleEsc);
     document.removeEventListener('click', overlayClose);
   };
@@ -258,7 +257,6 @@ function App() {
         }
       });
   };
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
